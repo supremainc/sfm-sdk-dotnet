@@ -8,6 +8,7 @@
             <summary>
             Class warpper for SFM_SDK.dll
             </summary>
+            
         </member>
         <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.Finalize">
             <summary>
