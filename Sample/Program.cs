@@ -13,7 +13,7 @@ namespace Sample
         {
             SFM_SDK_NET SFM = new SFM_SDK_NET();
             UF_RET_CODE result = new UF_RET_CODE();
-            result = SFM.UF_InitCommPort("COM3", 19200, false);
+            result = SFM.UF_InitCommPort("COM3", 115200, false);
             Console.WriteLine(result.ToString());
         }
     }
