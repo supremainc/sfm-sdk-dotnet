@@ -1,0 +1,1446 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SFM_SDK_NET</name>
+    </assembly>
+    <members>
+        <member name="T:Suprema.SFM_SDK_NET.SFM_SDK_NET">
+            <summary>
+            Class warpper for SFM_SDK.dll
+            </summary>
+            
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.Finalize">
+            <summary>
+            Destructor for the FTDI class.
+            </summary>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.LoadLibrary(System.String)">
+            <summary>
+            Built-in Windows API functions to allow us to dynamically load our own DLL.
+            Will allow us to use old versions of the DLL that do not have all of these functions available.
+            </summary>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetSDKVersion(System.Int32@,System.Int32@,System.Int32@)">
+            <summary>
+            Gets the version of SFM_SDK
+            </summary>
+            <param name="major">The number of major version</param>
+            <param name="minor">The number of minor version</param>
+            <param name="revision">The number of revision version</param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_InitCommPort(System.String,System.Int32,System.Boolean)">
+            <summary>
+            Opens a serial port and configures communication parameters. This function should be called first before calling any other APIs.
+            </summary>
+            <param name="commPort">Pointer to a null-terminated string that specifies the name of the serial port.</param>
+            <param name="baudrate">Specifies the baud rate at which the serial port operates. Available baud rates are 9600, 19200, 38400, 57600, 115200bps. The default setting of SFM modules is 115200bps.</param>
+            <param name="asciiMode">Determines the packet translation mode.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_CloseCommPort">
+            <summary>
+            Closes the serial port opened by UF_InitCommPort.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_InitSocket(System.String,System.Int32,System.Boolean)">
+            <summary>
+            Initializes the socket interface and connects to the module with specified IP address.
+            </summary>
+            <param name="inetAddr">IP address of the Ethernet-to-Serial converter. </param>
+            <param name="port">TCP port of the socket interface.</param>
+            <param name="asciiMode">Determines the packet translation mode.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_CloseSocket">
+            <summary>
+            Closes the socket interface.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Reconnect">
+            <summary>
+            To improve communication efficiency, the SDK caches basic information of a module such as system parameters and I/O settings. UF_Reconnect clears this cached information. When changing the modules connected to the serial port, this function should be called.
+            </summary>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetBaudrate(System.Int32)">
+            <summary>
+            Changes the baud rate.
+            </summary>
+            <param name="baudrate">Specifies the baud rate at which the serial port operates. Available baud rates are 9600, 19200, 38400, 57600, 115200bps. The default setting of SFM modules is 115200bps.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetAsciiMode(System.Boolean)">
+            <summary>
+            Changes the packet translation mode.
+            </summary>
+            <param name="asciiMode">TRUE for ascii format, FALSE for binary format.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SendPacket(System.Byte,System.UInt32,System.UInt32,System.Byte,System.Int32)">
+            <summary>
+            Sends a 13 byte packet to the module.
+            </summary>
+            <param name="command">Command field of a packet. Refer to the Packet Protocol Manual for available commands.</param>
+            <param name="param">Param field of a packet.</param>
+            <param name="size">Size field of a packet.</param>
+            <param name="flag">Flag field of a packet.</param>
+            <param name="timeout">Sets the timeout in milliseconds. If sending does not complete within this limit, UF_ERR_WRITE_SERIAL_TIMEOUT will be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SendNetworkPacket(System.Byte,System.UInt16,System.UInt32,System.UInt32,System.Byte,System.Int32)">
+            <summary>
+            Sends a 15 byte network packet to the specified module. In order to support RS422 or RS485 network interfaces, SFM modules support Network Packet Protocol. Network packet is composed of 15 bytes, whose start code is different from the standard packet, and includes 2 bytes for terminal ID. The terminal ID is equal to the lower 2 bytes of Module ID of system parameter.
+            </summary>
+            <param name="command">Command field of a packet. Refer to the Packet Protocol Manual for available commands.</param>
+            <param name="terminalID">Specifies the terminal ID of the receiving module.</param>
+            <param name="param">Param field of a packet.</param>
+            <param name="size">Size field of a packet.</param>
+            <param name="flag">Flag field of a packet.</param>
+            <param name="timeout">Sets the timeout in milliseconds. If sending does not complete within this limit, UF_ERR_WRITE_SERIAL_TIMEOUT will be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReceivePacket(System.Byte[],System.Int32)">
+            <summary>
+            Receives a 13 byte packet from the module. Most commands of Packet Protocol can be implemented by a pair of UF_SendPacket/UF_ReceivePacket or UF_SendNetworkPacket/UF_ReceiveNetworkPacket.
+            </summary>
+            <param name="packet">Pointer to the 13 byte packet.</param>
+            <param name="timeout">Sets the timeout in milliseconds. If receiving does not complete within this limit, UF_ERR_READ_SERIAL_TIMEOUT will be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReceiveNetworkPacket(System.Byte[],System.Int32)">
+            <summary>
+            Receives a 15 byte network packet from the specified module.
+            </summary>
+            <param name="packet">Pointer to the 15 byte packet.</param>
+            <param name="timeout">Sets the timeout in milliseconds. If receiving does not complete within this limit, UF_ERR_READ_SERIAL_TIMEOUT will be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SendRawData(System.Byte[],System.UInt32,System.Int32)">
+            <summary>
+            Some commands such as ET(Enroll Template) and IT(Identify Template) send additional data after the 13/15 byte request packet. UF_SendRawData is used in these cases for sending the data.
+            </summary>
+            <param name="buf">Pointer to a data buffer.</param>
+            <param name="size">Number of bytes to be sent.</param>
+            <param name="timeout">Sets the timeout in milliseconds. If sending does not complete within this limit, UF_ERR_WRITE_SERIAL_TIMEOUT will be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReceiveRawData(System.Byte[],System.UInt32,System.Int32,System.Boolean)">
+            <summary>
+            Some commands such as ST(Scan Template) and RT(Read Template) return additional data after the 13/15 byte response packet. UF_ReceiveRawData is used in these cases for receiving the data.
+            </summary>
+            <param name="buf">Pointer to a data buffer.</param>
+            <param name="size">Number of bytes to be received.</param>
+            <param name="timeout">Sets the timeout in milliseconds. If receiving does not complete within this limit, UF_ERR_READ_SERIAL_TIMEOUT will be returned.</param>
+            <param name="checkEndCode">Data transfer ends with ‘0x0a’. If this parameter is FALSE, the function returns without checking the end code.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SendDataPacket(System.Byte,System.Byte[],System.UInt32,System.UInt32)">
+            <summary>
+            Sends data using Extended Data Transfer Protocol. Dividing large data into small blocks can reduce communication errors between the host and the module. Extended Data Transfer Protocol is an extension of Packet Protocol to provide a reliable and customizable communication for large data. In Extended Data Transfer Protocol, data is divided into multiple data packets. And a data packet consists of fixed-length header, variable-length data body, and 4 byte checksum. Commands which use the Extended Data Transfer Protocols are EIX, VIX, IIX, RIX, SIX, and UG.
+            </summary>
+            <param name="command">Command field of a packet. Valid commands are EIX, VIX, IIX, RIX, SIX, and UG. </param>
+            <param name="buf">Pointer to a data buffer. </param>
+            <param name="dataSize">Number of bytes to be sent.</param>
+            <param name="dataPacketSize">Size of data packet. For example, if dataSize is 16384 bytes and dataPacketSize is 4096 bytes, the data will be divided into 4 data packets. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReceiveDataPacket(System.Byte,System.Byte[],System.UInt32)">
+            <summary>
+            Receives data using Extended Data Transfer Protocol. The size of data packet should be specified before calling this function. 
+            </summary>
+            <param name="command">Command field of a packet. Valid commands are EIX, VIX, IIX, RIX, SIX, and UG. </param>
+            <param name="buf">Pointer to a data buffer. </param>
+            <param name="dataSize">Number of bytes to be received.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetSendPacketCallback(Suprema.SFM_SDK_NET.SendPacketCallback)">
+            <summary>
+            If SendPacketCallback is specified, it is called after sending a packet successfully. The argument of the callback is the pointer to the packet.
+            </summary>
+            <param name="callback">Pointer to the callback function. </param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetReceivePacketCallback(Suprema.SFM_SDK_NET.ReceivePacketCallback)">
+            <summary>
+            If ReceivePacketCallback is specified, it is called after receiving a packet successfully. The argument of the callback is the pointer to the received packet.
+            </summary>
+            <param name="callback">Pointer to the callback function. </param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetSendDataPacketCallback(Suprema.SFM_SDK_NET.SendDataPacketCallback)">
+            <summary>
+            If SendDataPacketCallback is specified, it is called after sending a data packet successfully. The argument of the callback is the index of the data packet and the number of total data packets.
+            </summary>
+            <param name="callback">Pointer to the callback function. </param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetReceiveDataPacketCallback(Suprema.SFM_SDK_NET.ReceiveDataPacketCallback)">
+            <summary>
+            If ReceiveDataPacketCallback is specified, it is called after receiving a data packet successfully. The argument of the callback is the index of the data packet and the number of total data packets.
+            </summary>
+            <param name="callback">Pointer to the callback function. </param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetSendRawDataCallback(Suprema.SFM_SDK_NET.SendRawDataCallback)">
+            <summary>
+            If SendRawDataCallback is specified, it is called during sending raw data. The argument of the callback is the written length and the total length of data. 
+            </summary>
+            <param name="callback">Pointer to the callback function. </param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetReceiveRawDataCallback(Suprema.SFM_SDK_NET.ReceiveRawDataCallback)">
+            <summary>
+            If ReceiveRawDataCallback is specified, it is called during receiving data. The argument of the callback is the read length and the total length of data. 
+            </summary>
+            <param name="callback">Pointer to the callback function. </param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetDefaultPacketSize(System.Int32)">
+            <summary>
+            Sets the size of data packets used in Extended Data Transfer protocol. The default value is 4096. When BEACon is used as an Ethernet-to-Serial converter, this value should not be larger than 256. 
+            </summary>
+            <param name="defaultSize">Size of data packet. </param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetDefaultPacketSize">
+            <summary>
+            Returns the size of data packet used in Extended Data Transfer protocol. 
+            </summary>
+            <returns>The size of data packet.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetProtocol(Suprema.SFM_SDK_NET.UF_PROTOCOL,System.UInt32)">
+            <summary>
+            Selects packet protocol. If the host connects to the single module through RS232 interface, use UF_SINGLE_PROTOCOL. If there are multiple modules in RS422/485 networks, use UF_NETWORK_PROTOCOL. The protocol should also be compatible with the Network Mode system parameter. 
+            </summary>
+            <param name="protocol">UF_SINGLE_PROTOCOL for 13 byte packet protocol, UF_NETWORK_PROTOCOL for 15 byte network packet protocol.</param>
+            <param name="moduleID">Specifies the ID of the module. This parameter is applicable when the protocol is set to UF_NETWORK_PROTOCOL. </param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetProtocol">
+            <summary>
+            Gets the selected protocol. 
+            </summary>
+            <returns>UF_SINGLE_PROTOCOL or UF_NETWORK_PROTOCOL.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetModuleID">
+            <summary>
+            Gets the ID of the module.
+            </summary>
+            <returns>ID of the module. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetGenericCommandTimeout(System.Int32)">
+            <summary>
+            Sets the timeout for generic commands. The default timeout is 2,000ms.
+            </summary>
+            <param name="timeout">Specifies the timeout period in milliseconds.</param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetInputCommandTimeout(System.Int32)">
+            <summary>
+            Sets the timeout for commands which need user input. The default timeout is 10,000ms.
+            </summary>
+            <param name="timeout">Specifies the timeout period in milliseconds.</param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetGenericCommandTimeout">
+            <summary>
+            Gets the timeout for generic commands.
+            </summary>
+            <returns>Timeout for generic commands. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetInputCommandTimeout">
+            <summary>
+            Gets the timeout for commands which need user input. 
+            </summary>
+            <returns>Timeout for commands which need user input.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetNetworkDelay(System.Int32)">
+            <summary>
+            In half duplex mode, the same communication lines are shared for sending and receiving data. To prevent packet collisions on the shared line, there should be some delay between receiving and sending data. The default delay is set to 40ms. This value can be optimized for specific environments.
+            </summary>
+            <param name="delay">Specified the delay in milliseconds. </param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetNetworkDelay">
+            <summary>
+            Gets the network delay. 
+            </summary>
+            <returns>Delay in milliseconds. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Command(System.Byte,System.UInt32@,System.UInt32@,System.Byte@)">
+            <summary>
+            Encapsulates the commands composed of one request packet and one response packet. The majority of commands can be implemented using UF_Command.
+            </summary>
+            <param name="command">Command field of a packet. Refer to the Packet Protocol Manual for available commands.</param>
+            <param name="param">Param field of a packet. This parameter is used both for input and output. </param>
+            <param name="size">Size field of a packet. This parameter is used both for input and output.</param>
+            <param name="flag">Flag field of a packet. This parameter is used both for input and output.</param>
+            <returns>If packets are transferred successfully, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. UF_RET_SUCCESS only means that request packet is received successfully. To know if the operation succeeds, the flag field should be checked. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_CommandEx(System.Byte,System.UInt32@,System.UInt32@,System.Byte@,Suprema.SFM_SDK_NET.MessageCallback)">
+            <summary>
+            Encapsulates the commands composed of one request packet and multiple response packets. Command such as ES(Enroll) and IS(Identify) can have more than one response packet. To handle these cases, UF_CommandEx requires a message callback function, which should return TRUE when the received packet is the last one.
+            </summary>
+            <param name="command">Command field of a packet. Refer to the Packet Protocol Manual for available commands.</param>
+            <param name="param">Param field of a packet. This parameter is used both for input and output. </param>
+            <param name="size">Size field of a packet. This parameter is used both for input and output.</param>
+            <param name="flag">Flag field of a packet. This parameter is used both for input and output.</param>
+            <param name="callback">Pointer to the callback function. This callback is called when a response packet is received. If the callback return TRUE, UF_CommandEx will return immediately. If the callback return FALSE, UF_CommandEx will wait for another response packet.</param>
+            <returns>If packets are transferred successfully, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. UF_RET_SUCCESS only means that request packet is received successfully. To know if the operation succeeds, the flag field should be checked. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_CommandSendData(System.Byte,System.UInt32@,System.UInt32@,System.Byte@,System.Byte[],System.UInt32)">
+            <summary>
+            Encapsulates the commands which send additional data after a request packet. For example, GW(Write GPIO Configuration) command should send configuration data  after the request packet. 
+            </summary>
+            <param name="command">Command field of a packet. Refer to the Packet Protocol Manual for available commands.</param>
+            <param name="param">Param field of a packet. This parameter is used both for input and output. </param>
+            <param name="size">Size field of a packet. This parameter is used both for input and output.</param>
+            <param name="flag">Flag field of a packet. This parameter is used both for input and output.</param>
+            <param name="data">Pointer to the data buffer to be sent. </param>
+            <param name="dataSize">Number of bytes to be sent.</param>
+            <returns>If packets are transferred successfully, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. UF_RET_SUCCESS only means that request packet is received successfully. To know if the operation succeeds, the flag field should be checked.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_CommandSendDataEx(System.Byte,System.UInt32@,System.UInt32@,System.Byte@,System.Byte[],System.UInt32,Suprema.SFM_SDK_NET.MessageCallback,System.Boolean)">
+            <summary>
+            Encapsulates the commands which send additional data and have multiple response packets. For example, ET(Enroll Template) command sends template data after request packet and can have multiple response packets.
+            </summary>
+            <param name="command">Command field of a packet. Refer to the Packet Protocol Manual for available commands.</param>
+            <param name="param">Param field of a packet. This parameter is used both for input and output.</param>
+            <param name="size">Size field of a packet. This parameter is used both for input and output.</param>
+            <param name="flag">Flag field of a packet. This parameter is used both for input and output.</param>
+            <param name="data">Pointer to the data buffer to be sent. </param>
+            <param name="dataSize">Number of bytes to be sent. </param>
+            <param name="callback">Pointer to the callback function. This callback is called when a response packet is received. If the callback return TRUE, UF_CommandSendDataEx will return immediately. If the callback return FALSE, UF_CommandSendDataEx will wait for another response packet.</param>
+            <param name="waitUserInput">TRUE if the command needs user input. Otherwise, FALSE.</param>
+            <returns>If packets are transferred successfully, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. UF_RET_SUCCESS only means that request packet is received successfully. To know if the operation succeeds, the flag field should be checked. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Cancel(System.Boolean)">
+            <summary>
+            Cancels the command which is being processed by the module. When the module is executing a command which needs user input to proceed, the status of the module will be changed to UF_SYS_BUSY. If users want to execute another command before finishing the current one, they can explicitly cancel it by this function.
+            </summary>
+            <param name="receivePacket">If TRUE, UF_Cancel waits until the response packet is received. If FALSE, UF_Cancel returns immediately after sending the request packet. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetModuleInfo(Suprema.SFM_SDK_NET.UF_MODULE_TYPE@,Suprema.SFM_SDK_NET.UF_MODULE_VERSION@,Suprema.SFM_SDK_NET.UF_MODULE_SENSOR@)">
+            <summary>
+            Retrieves the type, version and sensor information of the module.
+            </summary>
+            <param name="type">Module types</param>
+            <param name="version">Module version</param>
+            <param name="sensorType">Module sensor type</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetModuleString(Suprema.SFM_SDK_NET.UF_MODULE_TYPE,Suprema.SFM_SDK_NET.UF_MODULE_VERSION,Suprema.SFM_SDK_NET.UF_MODULE_SENSOR)">
+            <summary>
+            Retrieves a string that describes the module information. This function should be called after UF_GetModuleInfo.
+            </summary>
+            <param name="type">Specifies the type of the module.</param>
+            <param name="version">Specifies the version number of the module.</param>
+            <param name="sensorType">Specifies the sensor type of the module.</param>
+            <returns>Null-terminated string that describes the module information. This pointer is a static data in the SDK. So, it should not be shared or freed by applications.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SearchModule(System.String,System.Int32@,System.Boolean@,Suprema.SFM_SDK_NET.UF_PROTOCOL@,System.Int32@,Suprema.SFM_SDK_NET.ProgressCallback)">
+            <summary>
+            Search a module connected to the specified serial port. UF_SearchModule tries all combinations of communication parameters. If it finds any module on the serial port, it returns the communication parameters and its module ID.
+            </summary>
+            <param name="port">Serial port.</param>
+            <param name="baudrate">Pointer to the baud rate to be returned. </param>
+            <param name="asciiMode">Pointer to the packet translation mode to be returned. </param>
+            <param name="protocol">Pointer to the protocol type to be returned.</param>
+            <param name="moduleID">Pointer to the module ID to be returned.</param>
+            <param name="callback"></param>
+            <returns>Pointer to the callback function. The callback function can be used for displaying the progress of the search. This parameter can be NULL.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SearchModuleBySocket(System.String,System.Int32,System.Boolean@,Suprema.SFM_SDK_NET.UF_PROTOCOL@,System.UInt32@)">
+            <summary>
+            Search a module connected to the specified IP address. If it finds any module, it will return the communication parameters and the module ID.
+            </summary>
+            <param name="inetAddr">IP address.</param>
+            <param name="tcpPort">TCP port.</param>
+            <param name="asciiMode">Pointer to the packet translation mode to be returned. </param>
+            <param name="protocol">Pointer to the protocol type to be returned.</param>
+            <param name="moduleID">Pointer to the module ID to be returned.</param>
+            <returns>If it finds a module, return UF_RET_SUCCESS. If the search fails, return UF_ERR_NOT_FOUND. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SearchModuleID(System.UInt32@)">
+            <summary>
+            Until firmware V1.3, SFM modules respond both standard and network packets regardless of Network Mode system parameter. However, since firmware V1.4, the modules only respond to 15 byte network packets if Network Mode system parameter is not Single(0x30). So, if users don’t know ID of the module, they cannot communicate with it in network environments. UF_SerachModuleID can be used to retrieve the ID of the module in these cases. Refer to ID command section in the Packet Protocol Manual for details.
+            </summary>
+            <param name="moduleID">Pointer to the module ID to be returned.</param>
+            <returns>If it finds a module, return UF_RET_SUCCESS. If the search fails, return UF_ERR_NOT_FOUND. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SearchModuleIDEx(System.UInt16@,System.Int32,System.UInt16@,System.Int32@)">
+            <summary>
+            UF_SearchModuleID is used for searching a module. To search multiple modules in a RS422/485 network, UF_SearchModuleIDEx should be used instead. By calling this function repetitively, users can search all the modules connected to a network. 
+            </summary>
+            <param name="foundModuleID">Pointer to the array of module IDs, which are already found. When the ID of a module is in this array, the module will ignore the search command.</param>
+            <param name="numOfFoundID">Number of module IDs, which are already found.</param>
+            <param name="moduleID">Pointer to the array of module IDs, which will be filled with newly found IDs.</param>
+            <param name="numOfID">Pointer to the number of module IDs to be returned.</param>
+            <returns>If it finds one or more modules, return UF_RET_SUCCESS. If the search fails, return UF_ERR_NOT_FOUND. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_CalibrateSensor">
+            <summary>
+            Calibrates fingerprint sensor. This function is supported for AuthenTec’s FingerLoc AF-S2 and UPEK’s TouchChip. After using the UF_CalibrateSensor, UF_Save should be called to save calibration data into flash memory.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Reset">
+            <summary>
+            Resets the module. 
+            </summary>
+            <returns>UF_RET_SUCCESS</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Lock">
+            <summary>
+            Locks the module. When the module is locked, it returns UF_ERR_LOCKED to functions other than UF_Unlock.
+            </summary>
+            <returns>If the module is locked successfully, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Unlock(System.String)">
+            <summary>
+            Unlocks a locked module.
+            </summary>
+            <param name="password">16 byte master password. The default password is a string of 16 NULL characters.</param>
+            <returns>If the password is wrong, return UF_ERR_NOT_MATCH. If it is successful, return UF_RET_SUCCESS.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ChangePassword(System.Byte[],System.Byte[])">
+            <summary>
+            Changes the master password.
+            </summary>
+            <param name="newPassword">16 byte new password. </param>
+            <param name="oldPassword">16 byte old password. </param>
+            <returns>If the old password is wrong, return UF_ERR_NOT_MATCH. If it is successful, return UF_RET_SUCCESS.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReadChallengeCode(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="challengeCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_WriteChallengeCode(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="challengeCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_PowerOff">
+            <summary>
+            Programmatically turns off a module (SFM4000 only).
+            </summary>
+            <returns>UF_RET_SUCCESS</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_InitSysParameter">
+            <summary>
+            To prevent redundant communication, the SFM SDK caches the system parameters previously read or written. UF_InitSysParameter clears this cache. It is called in UF_Reconnect. 
+            </summary>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetSysParameter(Suprema.SFM_SDK_NET.UF_SYS_PARAM,System.UInt32@)">
+            <summary>
+            Reads the value of a system parameter. 
+            </summary>
+            <param name="parameter">System parameter to be read.</param>
+            <param name="value">Pointer to the value of the specified system parameter to be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. If there is no such parameter, return UF_ERR_NOT_FOUND. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetSysParameter(Suprema.SFM_SDK_NET.UF_SYS_PARAM,System.UInt32)">
+            <summary>
+            Writes the value of a system parameter. The parameter value is changed in memory only. To make the change permanent, UF_Save should be called after  this function. For BioEntry Smart and Pass, users cannot change the UF_SYS_MODULE_ID system parameter.
+            </summary>
+            <param name="parameter">System parameter to be written.</param>
+            <param name="value">Value of the system parameter. Refer to the Packet Protocol Manual for available values for each parameter.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. If there is no such parameter, return UF_ERR_NOT_FOUND. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetMultiSysParameter(System.Int32,Suprema.SFM_SDK_NET.UF_SYS_PARAM[],System.UInt32[])">
+            <summary>
+            Reads the values of multiple system parameters. 
+            </summary>
+            <param name="parameterCount">Number of system parameters to be read.</param>
+            <param name="parameters">Array of system parameters to be read.</param>
+            <param name="values">Array of the values of the specified system parameters to be read.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetMultiSysParameter(System.Int32,Suprema.SFM_SDK_NET.UF_SYS_PARAM[],System.UInt32[])">
+            <summary>
+            Writes the values of multiple system parameters. The parameter value is changed in memory only. To make the change permanent, UF_Save should be called.
+            </summary>
+            <param name="parameterCount">Number of system parameters to be written.</param>
+            <param name="parameters">Array of system parameters to be written.</param>
+            <param name="values">Array of the values of the specified system parameters to be written.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Save">
+            <summary>
+            Saves the system parameters into the flash memory. 
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SaveConfiguration(System.String,System.String,System.Int32,Suprema.SFM_SDK_NET.UFConfigComponentHeader[],System.Byte[])">
+            <summary>
+            Saves system configurations into the specified file. The configuration file consists of a file header and multiple configuration components. There are 5 configuration components to be saved.
+            </summary>
+            <param name="filename">Null-terminated string that specifies the file name. </param>
+            <param name="description">Null-terminated string describing the configuration file. The maximum length of description is 256 bytes. </param>
+            <param name="numOfComponent">Number of components to be saved. </param>
+            <param name="componentHeader">Pointer to an array of UFConfigComponentHeader structures to be saved.</param>
+            <param name="componentData">Pointer to an array of component data to be saved. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReadConfigurationHeader(System.String,Suprema.SFM_SDK_NET.UFConfigFileHeader@)">
+            <summary>
+            Reads the header information from a file which is saved by UF_SaveConfiguration.
+            </summary>
+            <param name="filename">Null-terminated string that specifies the file name. </param>
+            <param name="header">Pointer to the UFConfigFileHeader to be read.</param>
+            <returns>If the header is read successfully, return UF_RET_SUCCESS. If the file is of invalid type, return UF_ERR_INVALID_FILE. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_LoadConfiguration(System.String,System.Int32,Suprema.SFM_SDK_NET.UF_CONFIG_TYPE[])">
+            <summary>
+            Loads system configurations into a module from the specified file. To make permanent the configuration changes, UF_Save should be called after UF_LoadConfiguration.
+            </summary>
+            <param name="filename">Null-terminated string that specifies the file name. </param>
+            <param name="numOfComponent">Number of configuration components to be loaded.</param>
+            <param name="type">Array of component types to be loaded. </param>
+            <returns>If the configurations are loaded successfully, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_MakeParameterConfiguration(Suprema.SFM_SDK_NET.UFConfigComponentHeader@,System.Byte[])">
+            <summary>
+            Make a UFConfigComponentHeader and a UFConfigParameter structure to be used in UF_SaveConfiguration. 
+            </summary>
+            <param name="configHeader">Pointer to the UFConfigComponentHeader structure. </param>
+            <param name="configData">Pointer to the UFConfigParameter structure. It should be preallocated large enough to store all the parameter information. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetNumOfTemplate(System.UInt32@)">
+            <summary>
+            Gets the number of templates stored in the module.
+            </summary>
+            <param name="numOfTemplate">Pointer to the number of templates to be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetMaxNumOfTemplate(System.UInt32@)">
+            <summary>
+            Gets the template capacity of the module.
+            </summary>
+            <param name="maxNumOfTemplate">Pointer to the template capacity to be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetAllUserInfo(Suprema.SFM_SDK_NET.UFUserInfo[],System.UInt32@,System.UInt32@)">
+            <summary>
+            Retrieves all the user and template information stored in the module. 
+            </summary>
+            <param name="userInfo">Array of UFUserInfo structures, which will store all the information. This pointer should be preallocated large enough to store all the information. </param>
+            <param name="numOfUser">Pointer to the number of users to be returned.</param>
+            <param name="numOfTemplate">Pointer to the number of templates to be returned. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetAllUserInfoEx(Suprema.SFM_SDK_NET.UFUserInfoEx[],System.UInt32@,System.UInt32@)">
+            <summary>
+            Retrieves all the user and template information stored in the BioEntry reader. 
+            </summary>
+            <param name="userInfo">Array of UFUserInfoEx structures, which will store all the information. This pointer should be preallocated large enough to store all the information. </param>
+            <param name="numOfUser">Pointer to the number of users to be returned.</param>
+            <param name="numOfTemplate">Pointer to the number of templates to be returned. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SortUserInfo(Suprema.SFM_SDK_NET.UFUserInfo[],System.Int32)">
+            <summary>
+            Sorts an UFUserInfo array in ascending order of user ID.
+            </summary>
+            <param name="userInfo">Array of UFUserInfo structures. </param>
+            <param name="numOfUser">Number of UFUserInfo.</param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetUserInfoCallback(Suprema.SFM_SDK_NET.UserInfoCallback)">
+            <summary>
+            Sets the callback function for getting user information. It is also called when enrolling templates in UF_LoadDB and reading templates in UF_SaveDB.
+            </summary>
+            <param name="callback">Pointer to the callback function.</param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetAdminLevel(System.UInt32,Suprema.SFM_SDK_NET.UF_ADMIN_LEVEL)">
+            <summary>
+            Sets the administration level of a user. See UF_EnrollAfterVerification and UF_DeleteAllAfterVerificatoin for usage of administration level.
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="adminLevel">Specifies the administration level of the user. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetAdminLevel(System.UInt32,Suprema.SFM_SDK_NET.UF_ADMIN_LEVEL@)">
+            <summary>
+            Gets the administration level of a user. 
+            </summary>
+            <param name="userID">User ID. </param>
+            <param name="adminLevel">Pointer to the administration level of the user to be returned. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetSecurityLevel(System.UInt32,Suprema.SFM_SDK_NET.UF_USER_SECURITY_LEVEL)">
+            <summary>
+            Since V1.6 firmware, the security level can be assigned per user basis for 1:1 matching. 1:N matching – identification – is not affected by this setting.
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="securityLevel">Specifies the security level of the user. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetSecurityLevel(System.UInt32,Suprema.SFM_SDK_NET.UF_USER_SECURITY_LEVEL@)">
+            <summary>
+            Gets the security level of a user
+            </summary>
+            <param name="userID">User ID. </param>
+            <param name="securityLevel">Pointer to the security level of the user to be returned. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ClearAllAdminLevel">
+            <summary>
+            Resets administration levels of all users to UF_ADMIN_NONE.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SaveDB(System.String)">
+            <summary>
+            Saves all the templates and user information stored in a module into the specified file. 
+            </summary>
+            <param name="fileName">Null-terminated string that specifies the file name. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_LoadDB(System.String)">
+            <summary>
+            Loads templates and user information from the specified file. All the templates previously stored in the module will be erased before loading the DB. 
+            </summary>
+            <param name="fileName">Null-terminated string that specifies the file name. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_CheckTemplate(System.UInt32,System.UInt32@)">
+            <summary>
+            Checks if the specified user ID has enrolled templates. 
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="numOfTemplate">Pointer to the number of templates of the user ID to be returned.</param>
+            <returns>If there are templates of the user ID, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReadTemplate(System.UInt32,System.UInt32@,System.Byte[])">
+            <summary>
+            Reads the templates of the specified user ID.
+            </summary>
+            <param name="userID">User ID. </param>
+            <param name="numOfTemplate">Pointer to the number of templates of the user ID to be returned. </param>
+            <param name="templateData">Pointer to the template data to be returned. This pointer should be preallocated large enough to store all the template data. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReadOneTemplate(System.UInt32,System.Int32,System.Byte[])">
+            <summary>
+            Reads one template of the specified user ID.
+            </summary>
+            <param name="userID">User ID. </param>
+            <param name="subID">Sub index of the template. It is between 0 and 9.</param>
+            <param name="templateData">Pointer to the template data to be returned. This pointer should be preallocated large enough to store all the template data. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetScanCallback(Suprema.SFM_SDK_NET.ScanCallback)">
+            <summary>
+            Sets the callback function of scanning fingerprints. This callback is called when SCAN_SUCCESS message is received.
+            </summary>
+            <param name="callback">Pointer to the callback function. </param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ScanTemplate(System.Byte[],System.UInt32@,System.UInt32@)">
+            <summary>
+            Scans a fingerprint on the sensor and receives the template of it. 
+            </summary>
+            <param name="templateData">Pointer to the template data to be returned. </param>
+            <param name="templateSize">Pointer to the template size to be returned. </param>
+            <param name="imageQuality">Pointer to the image quality score to be returned. The score shows the quality of scanned fingerprint and is in the range of 0 ~ 100. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_FixProvisionalTemplate">
+            <summary>
+            UF_SYS_PROVISIONAL_ENROLL determines if enrolled templates are saved permanently into flash memory or temporarily into DRAM. With provisional enroll, enrolled templates on DRAM will be erased if the module is turned off. UF_FixProvisionalTemplate saves the provisional templates into the flash memory.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetAuthType(System.UInt32,Suprema.SFM_SDK_NET.UF_AUTH_TYPE)">
+            <summary>
+            Sets the authentication type of a user. UF_AUTH_BYPASS can be used for 1:1 matching, when it is necessary to allow access without matching fingerprints. UF_AUTH_REJECT can be used for disabling some IDs temporarily. The default authentication mode is UF_AUTH_FINGERPRINT.
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="authType">Specifies the authentication type of the user. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetAuthType(System.UInt32,Suprema.SFM_SDK_NET.UF_AUTH_TYPE@)">
+            <summary>
+            Gets the authentication type of a user. 
+            </summary>
+            <param name="userID">User ID. </param>
+            <param name="authType">Pointer to the authentication type of the user to be returned. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetUserIDByAuthType(Suprema.SFM_SDK_NET.UF_AUTH_TYPE,System.Int32@,System.UInt32@)">
+            <summary>
+            Receive user IDs with the specified authentication type.
+            </summary>
+            <param name="authType">Authentication type.</param>
+            <param name="numOfID">Pointer to the number of user IDs to be returned. </param>
+            <param name="userID">Array of user IDs which have the specified authentication type. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ResetAllAuthType">
+            <summary>
+            Resets the authentication types of all users to UF_AUTH_FINGERPRINT.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_AddBlacklist(System.UInt32,System.Int32@)">
+            <summary>
+            Adds a user ID to the blacklist. 
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="numOfBlacklistedID">Number of IDs in the blacklist after adding. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_DeleteBlacklist(System.UInt32,System.Int32@)">
+            <summary>
+            Deletes an ID from the blacklist. 
+            </summary>
+            <param name="userID">User ID. </param>
+            <param name="numOfBlacklistedID">Number of IDs in the blacklist after deleting. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetBlacklist(System.Int32@,System.UInt32[])">
+            <summary>
+            Receive user IDs in the blacklist.
+            </summary>
+            <param name="numOfBlacklistedID">Pointer to the number of IDs in the blacklist.</param>
+            <param name="userID">Array of user IDs in the blacklist. This should be pre-acllocated large enough.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_DeleteAllBlacklist">
+            <summary>
+            Clears the blacklist.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetEntranceLimit(System.UInt32,System.Int32)">
+            <summary>
+            Specifies how many times the user is permitted to access per day. The available options are between 0 and 7. The default value is 0, which means that there is no limit. If the user tries to authenticate after the limit is reached, UF_ERR_EXCEED_ENTRANCE_LIMIT error will be returned.
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="entranceLimit">Entrance limit between 0 and 7. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetEntranceLimit(System.UInt32,System.Int32@,System.Int32@)">
+            <summary>
+            Gets the entrance limit of a user. 
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="entranceLimit">Pointer to the entrance limit of the user.</param>
+            <param name="entranceCount">Pointer to the number of entrance for today. This count is reset to 0 at midnight.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ClearAllEntranceLimit">
+            <summary>
+            Resets the entrance limits of all users to 0 – infinite.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ConvertToBitmap(Suprema.SFM_SDK_NET.UFImage)">
+            <summary>
+            Converts a UFImage to a Bitmap object.
+            </summary>
+            <param name="image">Pointer to the UFImage structure to be converted.</param>
+            <returns>If the function succeeds, return the Bitmap object. Otherwise, return NULL. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SaveImage(System.String,Suprema.SFM_SDK_NET.UFImage)">
+            <summary>
+            Converts a UFImage into a bitmap and save it into the specified file.
+            </summary>
+            <param name="fileName">Null-terminated string that specifies the file name. </param>
+            <param name="image">Pointer to the UFImage to be saved.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_LoadImage(System.String,Suprema.SFM_SDK_NET.UFImage@)">
+            <summary>
+            Loads a bmp file into a UFImage structure.
+            </summary>
+            <param name="fileName">Null-terminated string that specifies the file name. </param>
+            <param name="image">Pointer to the UFImage structure. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReadImage(Suprema.SFM_SDK_NET.UFImage@)">
+            <summary>
+            Reads the last scanned fingerprint image. 
+            </summary>
+            <param name="image">Pointer to the UFImage structure.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ScanImage(Suprema.SFM_SDK_NET.UFImage@)">
+            <summary>
+            Scans a fingerprint input on the sensor and retrieves the image of it. 
+            </summary>
+            <param name="image">Pointer to the UFImage structure.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetIdentifyCallback(Suprema.SFM_SDK_NET.IdentifyCallback)">
+            <summary>
+            Sets the callback function for identification process. This callback is called after receiving UF_PROTO_RET_SCAN_SUCCESS message. 
+            </summary>
+            <param name="callback">Pointer to the callback function.</param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Identify(System.UInt32@,System.Byte@)">
+            <summary>
+            Identifies the fingerprint input on the sensor.
+            </summary>
+            <param name="userID">Pointer to the user ID to be returned.</param>
+            <param name="subID">Pointer to the index of the template to be returned.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_IdentifyTemplate(System.UInt32,System.Byte[],System.UInt32@,System.Byte@)">
+            <summary>
+            Identifies a template.
+            </summary>
+            <param name="templateSize">Size of the template data.</param>
+            <param name="templateData">Pointer to the template data.</param>
+            <param name="userID">Pointer to the user ID to be returned.</param>
+            <param name="subID">Pointer to the index of the template to be returned.</param>
+            <returns>If matching succeeds, return UF_RET_SUCCESS. If matching fails, return UF_ERR_NOT_FOUND. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_IdentifyImage(System.UInt32,System.Byte[],System.UInt32@,System.Byte@)">
+            <summary>
+            Identifies a fingerprint image.
+            </summary>
+            <param name="imageSize">Size of the image data.</param>
+            <param name="imageData">Pointer to the raw image data. Note that it is not the pointer to UFImage, but the pointer to the raw pixel data without the UFImage header.</param>
+            <param name="userID">Pointer to the user ID to be returned.</param>
+            <param name="subID">Pointer to the index of the template to be returned. </param>
+            <returns>If matching succeeds, return UF_RET_SUCCESS. If matching fails, return UF_ERR_NOT_FOUND. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetVerifyCallback(Suprema.SFM_SDK_NET.VerifyCallback)">
+            <summary>
+            Sets the callback function for identification process. This callback is called after receiving UF_PROTO_RET_SCAN_SUCCESS message. 
+            </summary>
+            <param name="callback">Pointer to the callback function.</param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Verify(System.UInt32,System.Byte@)">
+            <summary>
+            Verifies if a fingerprint input on the sensor matches the enrolled fingerprints of the specified user id.
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="subID">Pointer to the index of the template to be returned.</param>
+            <returns>If matching succeeds, return UF_RET_SUCCESS. If matching fails, return UF_ERR_NOT_MATCH. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_VerifyTemplate(System.UInt32,System.Byte[],System.UInt32,System.Byte@)">
+            <summary>
+            Verifies a template. 
+            </summary>
+            <param name="templateSize">Size of the template data.</param>
+            <param name="templateData">Pointer to the template data to be sent.</param>
+            <param name="userID">User ID.</param>
+            <param name="subID">Pointer to the index of the template to be returned.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_VerifyHostTemplate(System.UInt32,System.UInt32,System.Byte[])">
+            <summary>
+            Transmits fingerprint templates from the host to the module and verifies if they match the live fingerprint input on the sensor. 
+            </summary>
+            <param name="numOfTemplate">Number of templates to be transferred to the module.</param>
+            <param name="templateSize">Size of a template.</param>
+            <param name="templateData">Pointer to the template data to be transferred to the module.</param>
+            <returns>If matching succeeds, return UF_RET_SUCCESS. If matching fails, return UF_ERR_NOT_MATCH. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_VerifyImage(System.UInt32,System.Byte[],System.UInt32,System.Byte@)">
+            <summary>
+            Verifies a fingerprint image.
+            </summary>
+            <param name="imageSize">Size of the fingerprint image.</param>
+            <param name="imageData">Pointer to the raw image data. Note that it is not the pointer to UFImage, but the pointer to the raw pixel data without the UFImage header.</param>
+            <param name="userID">User ID.</param>
+            <param name="subID">Pointer to the index of the template to be returned.</param>
+            <returns>If matching succeeds, return UF_RET_SUCCESS. If matching fails, return UF_ERR_NOT_MATCH. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetEnrollCallback(Suprema.SFM_SDK_NET.EnrollCallback)">
+            <summary>
+            Sets the callback function for enrollment process. This callback is called after receiving response packets with UF_PROTO_RET_SCAN_SUCCESS, UF_PROTO_RET_SUCCESS, or UF_PROTO_RET_CONTINUE messages. 
+            </summary>
+            <param name="callback">Pointer to the callback function.</param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Enroll(System.UInt32,Suprema.SFM_SDK_NET.UF_ENROLL_OPTION,System.UInt32@,System.UInt32@)">
+            <summary>
+            Enrolls fingerprint inputs on the sensor. The enrollment process varies according to the UF_SYS_ENROLL_MODE system parameter.  
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="option">Enroll option.</param>
+            <param name="enrollID">Pointer to the enrolled user ID. This parameter can be different from userID when AUTO_ID option is used.</param>
+            <param name="imageQuality">Pointer to the image quality score to be returned. The score shows the quality of scanned fingerprint and is in the range of 0 ~ 100. </param>
+            <returns>If enroll succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_EnrollContinue(System.UInt32,System.UInt32@,System.UInt32@)">
+            <summary>
+            Continues the enrollment process when the enroll mode is UF_ENROLL_TWO_TIMES2 or UF_ENROLL_TWO_TEMPLATES2. 
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="enrollID">Pointer to the enrolled user ID. This parameter can be different from userID when AUTO_ID option is used.</param>
+            <param name="imageQuality">Pointer to the image quality score to be returned. The score shows the quality of scanned fingerprint and is in the range of 0 ~ 100.</param>
+            <returns>If enroll succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_EnrollAfterVerification(System.UInt32,Suprema.SFM_SDK_NET.UF_ENROLL_OPTION,System.UInt32@,System.UInt32@)">
+            <summary>
+            Enroll and Delete functions change the fingerprint DB stored in the module. For some applications, it might be necessary to obtain administrator’s permission before enrolling or deleting fingerprints. To process these functions, a user with proper administration level should verify himself first. If there is no user with corresponding administration level, these commands will fail with UF_ERR_UNSUPPORTED error code. If the verification fails, UF_ERR_NOT_MATCH error code will be returned. The only exception is that UF_EnrollAfterVerification will succeed when the fingerprint DB is empty. In that case, the first user enrolled by UF_EnrollAfterVerification will have UF_ADMIN_LEVEL_ALL. 
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="option">Enroll option.</param>
+            <param name="enrollID">Pointer to the enrolled user ID. This parameter can be different from userID when AUTO_ID option is used.</param>
+            <param name="imageQuality">Pointer to the image quality score to be returned. The score shows the quality of scanned fingerprint and is in the range of 0 ~ 100.</param>
+            <returns>If enroll succeeds, return UF_RET_SUCCESS. If there is no user with corresponding administration level, return UF_ERR_UNSUPPORTED. If administrator’s verification fails, return UF_ERR_NOT_MATCH. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_EnrollTemplate(System.UInt32,Suprema.SFM_SDK_NET.UF_ENROLL_OPTION,System.UInt32,System.Byte[],System.UInt32@)">
+            <summary>
+            Enrolls a fingerprint template.
+            </summary>
+            <param name="userID">User ID. </param>
+            <param name="option">Enroll option. </param>
+            <param name="templateSize">Size of the template data. </param>
+            <param name="templateData">Pointer to the template data. </param>
+            <param name="enrollID">Pointer to the enrolled user ID. This parameter can be different from userID when AUTO_ID option is used.</param>
+            <returns>If enroll succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_EnrollMultipleTemplates(System.UInt32,Suprema.SFM_SDK_NET.UF_ENROLL_OPTION,System.Int32,System.UInt32,System.Byte[],System.UInt32@)">
+            <summary>
+            Enrolls multiple templates to the specified ID.
+            </summary>
+            <param name="userID">User ID. </param>
+            <param name="option">Enroll option. </param>
+            <param name="numOfTemplate">Number of templates to be enrolled.</param>
+            <param name="templateSize">Size of one template data. For example, when enroll 3 templates of 384 byte, this parameter is 384 not 1152.</param>
+            <param name="templateData">Pointer to the template data. </param>
+            <param name="enrollID">Pointer to the enrolled user ID. This parameter can be different from userID when AUTO_ID option is used.</param>
+            <returns>If enroll succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_EnrollMultipleTemplatesEx(System.UInt32,Suprema.SFM_SDK_NET.UF_ENROLL_OPTION,System.Int32,System.Int32,System.UInt32,System.Byte[],System.UInt32@)">
+            <summary>
+            Enrolls multiple templates to the specified ID.
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="option">Enroll option.</param>
+            <param name="numOfTemplate">Number of templates to be enrolled.</param>
+            <param name="numOfEnroll">Number of Enroll to be enrolled.</param>
+            <param name="templateSize">Size of one template data. For example, when enroll 3 templates of 384 byte, this parameter is 384 not 1152.</param>
+            <param name="templateData">Pointer to the template data.</param>
+            <param name="enrollID">Pointer to the enrolled user ID. This parameter can be different from userID when AUTO_ID option is used.</param>
+            <returns>If enroll succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_EnrollImage(System.UInt32,Suprema.SFM_SDK_NET.UF_ENROLL_OPTION,System.UInt32,System.Byte[],System.UInt32@,System.UInt32@)">
+            <summary>
+            Enrolls a fingerprint image. 
+            </summary>
+            <param name="userID">User ID. </param>
+            <param name="option">Enroll option. </param>
+            <param name="imageSize">Size of the image data. </param>
+            <param name="imageData">Pointer to the raw image data. Note that it is not the pointer to UFImage, but the pointer to the raw pixel data without the UFImage header.</param>
+            <param name="enrollID">Pointer to the enrolled user ID. This parameter can be different from userID when AUTO_ID option is used..</param>
+            <param name="imageQuality">Pointer to the image quality score to be returned. The score shows the quality of scanned fingerprint and is in the range of 0 ~ 100. </param>
+            <returns>If enroll succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetDeleteCallback(Suprema.SFM_SDK_NET.DeleteCallback)">
+            <summary>
+            Sets the callback function for delete process. This callback is called after receiving UF_PROTO_RET_SCAN_SUCCESS or UF_PROTO_RET_CONTINUE.
+            </summary>
+            <param name="callback">Pointer to the callback function.</param>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Delete(System.UInt32)">
+            <summary>
+            Deletes the enrolled templates of the specified user ID. 
+            </summary>
+            <param name="userID">User ID.</param>
+            <returns>If delete succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_DeleteOneTemplate(System.UInt32,System.Int32)">
+            <summary>
+            Deletes one template of the specified user ID. 
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="subID">Sub index of the template. It is between 0 and 9.</param>
+            <returns>If delete succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_DeleteMultipleTemplates(System.UInt32,System.UInt32,System.Int32@)">
+            <summary>
+            Deletes the enrolled templates of multiple user IDs.
+            </summary>
+            <param name="startUserID">First user ID to be deleted. </param>
+            <param name="lastUserID">Last user ID to be deleted. </param>
+            <param name="deletedUserID">Pointer to the number of IDs to be actually deleted by the module.</param>
+            <returns>If delete succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_DeleteAll">
+            <summary>
+            Deletes all the templates stored in a module.
+            </summary>
+            <returns>If delete succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_DeleteAllAfterVerification">
+            <summary>
+            Deletes all the templates after administrator’s verification. 
+            </summary>
+            <returns>If delete succeeds, return UF_RET_SUCCESS. If there is no user with corresponding administration level, return UF_ERR_UNSUPPORTED. If administrator’s verification fails, return UF_ERR_NOT_MATCH. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_InitIO">
+            <summary>
+            To prevent redundant communication, the SFM SDK caches the output events  previously read or written. UF_InitIO clears the cache. It is called in UF_Reconnect. 
+            </summary>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetInputFunction(Suprema.SFM_SDK_NET.UF_INPUT_PORT,Suprema.SFM_SDK_NET.UF_INPUT_FUNC,System.UInt32)">
+            <summary>
+            Sets the function of an input port. 
+            </summary>
+            <param name="port">One of the three input ports – UF_INPUT_PORT0, UF_INPUT_PORT1, and UF_INPUT_PORT2. For BioEntry Smart and Pass, UF_INPUT_PORT2 is assigned  to Tamper SW and not configurable. </param>
+            <param name="inputFunction">Input function.</param>
+            <param name="minimumTime">Minimum duration after which the input signal is acknowledged as active.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetInputFunction(Suprema.SFM_SDK_NET.UF_INPUT_PORT,Suprema.SFM_SDK_NET.UF_INPUT_FUNC@,System.UInt32@)">
+            <summary>
+            Gets the function assigned to an input port.
+            </summary>
+            <param name="port">Input port.</param>
+            <param name="inputFunction">Pointer to the input function to be returned.</param>
+            <param name="minimumTime">Pointer to the minimum duration of input signal to be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetInputStatus(Suprema.SFM_SDK_NET.UF_INPUT_PORT,System.Boolean,System.UInt32@)">
+            <summary>
+            Gets the status of an input port. 
+            </summary>
+            <param name="port">Input port.</param>
+            <param name="remainStatus">If TRUE, don’t change the status of the input port after reading. If FALSE, clear the status of the input port.</param>
+            <param name="status">Pointer to the status of the input port to be read. 0 for inactive and 1 for active status.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetOutputEventList(Suprema.SFM_SDK_NET.UF_OUTPUT_PORT,Suprema.SFM_SDK_NET.UF_OUTPUT_EVENT[],System.UInt32@)">
+            <summary>
+            Gets the list of output events assigned to an output/LED port. Available output events are as follows;
+            </summary>
+            <param name="port">Output/LED port.</param>
+            <param name="events">Array of output events to be returned.</param>
+            <param name="numOfEvent">Pointer to the number of output events to be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ClearAllOutputEvent(Suprema.SFM_SDK_NET.UF_OUTPUT_PORT)">
+            <summary>
+            Clears all the output events assigned to an output/LED port.
+            </summary>
+            <param name="port">Output/LED port. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ClearOutputEvent(Suprema.SFM_SDK_NET.UF_OUTPUT_PORT,Suprema.SFM_SDK_NET.UF_OUTPUT_EVENT)">
+            <summary>
+            Clears the specified output event from the output port.
+            </summary>
+            <param name="port">Output/LED port.</param>
+            <param name="events">Output event to be deleted from the output/LED port.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetOutputEvent(Suprema.SFM_SDK_NET.UF_OUTPUT_PORT,Suprema.SFM_SDK_NET.UF_OUTPUT_EVENT,Suprema.SFM_SDK_NET.UFOutputSignal)">
+            <summary>
+            Adds an output event to the specified output/LED port. The characteristics of output signal is also specified. 
+            </summary>
+            <param name="port">Output/LED port. </param>
+            <param name="events">Output event to be added.</param>
+            <param name="signal">Signal specification of the output event.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetOutputEvent(Suprema.SFM_SDK_NET.UF_OUTPUT_PORT,Suprema.SFM_SDK_NET.UF_OUTPUT_EVENT,Suprema.SFM_SDK_NET.UFOutputSignal@)">
+            <summary>
+            Gets the signal data of an output event on the specified output/LED port.
+            </summary>
+            <param name="port">Output/LED port.</param>
+            <param name="events">Output event.</param>
+            <param name="signal">Pointer to the signal data to be returned.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetOutputStatus(Suprema.SFM_SDK_NET.UF_OUTPUT_PORT,System.Boolean)">
+            <summary>
+            Sets the status of an output/LED port. 
+            </summary>
+            <param name="port">Output/LED port. </param>
+            <param name="status">TRUE for active and FALSE for inactive status.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetLegacyWiegandConfig(System.Boolean,System.Boolean,System.UInt32,System.UInt32)">
+            <summary>
+            Until the firmware V1.3, SFM 3500 modules only support 26 bit Wiegand format. Since the firmware V1.4, Extended Wiegand Interface is provided, which is much more powerful and flexible. UF_SetLegacyWiegandConfig configures the legacy 26 bit Wiegand format and is provided only for firmwares older than V1.4. 
+            </summary>
+            <param name="enableInput">If TRUE, the module starts verification process when receiving Wiegand inputs. </param>
+            <param name="enableOutput">If TURE, the module outputs the user ID when verification or identification succeeds. </param>
+            <param name="fcBits">Specifies the number of facility bits. </param>
+            <param name="fcCode">Specifies the facility code.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetLegacyWiegandConfig(System.Boolean@,System.Boolean@,System.UInt32@,System.UInt32@)">
+            <summary>
+            Gets the configuration of the 26 bit Wiegand format.
+            </summary>
+            <param name="enableInput">Pointer to the input enable status. </param>
+            <param name="enableOutput">Pointer to the output enable status.</param>
+            <param name="fcBits">Pointer to the number of facility bits to be returned. </param>
+            <param name="fcCode">Pointer to the facility code to be returned. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_MakeIOConfiguration(Suprema.SFM_SDK_NET.UFConfigComponentHeader@,System.Byte[])">
+            <summary>
+            Makes IO configuration data to be saved into a file. See the example of UF_SaveConfiguration for the usage of this function.
+            </summary>
+            <param name="configHeader">Pointer to the configuration header to be returned. </param>
+            <param name="configData">Pointer to the configuration data to be returned. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetGPIOConfiguration(Suprema.SFM_SDK_NET.UF_GPIO_PORT,Suprema.SFM_SDK_NET.UF_GPIO_MODE@,System.Int32@,Suprema.SFM_SDK_NET.UFGPIOData[])">
+            <summary>
+            Gets the configuration data of a GPIO port. 
+            </summary>
+            <param name="port">GPIO port from UF_GPIO_0 to UF_GPIO_7.</param>
+            <param name="mode">Pointer to the GPIO mode to be returned. </param>
+            <param name="numOfData">Number of configuration data assigned to the port. </param>
+            <param name="data">Array of GPIO configuration data to be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetInputGPIO(Suprema.SFM_SDK_NET.UF_GPIO_PORT,Suprema.SFM_SDK_NET.UFGPIOInputData)">
+            <summary>
+            Configures an input GPIO port. 
+            </summary>
+            <param name="port">GPIO port. Only GPIO 0 to GPIO 3 can be an input port.</param>
+            <param name="data">UFGPIOInputData </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetOutputGPIO(Suprema.SFM_SDK_NET.UF_GPIO_PORT,System.Int32,Suprema.SFM_SDK_NET.UFGPIOOutputData[])">
+            <summary>
+            Configures an output GPIO port.
+            </summary>
+            <param name="port">GPIO port. </param>
+            <param name="numOfData">Number of UFGPIOOutputData to be assigned to the GPIO port.</param>
+            <param name="data">Array of UFGPIOOutputData to be assigned to the GPIO port. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetBuzzerGPIO(Suprema.SFM_SDK_NET.UF_GPIO_PORT,System.Int32,Suprema.SFM_SDK_NET.UFGPIOOutputData[])">
+            <summary>
+            
+            </summary>
+            <param name="port"></param>
+            <param name="numOfData"></param>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetSharedGPIO(Suprema.SFM_SDK_NET.UF_GPIO_PORT,Suprema.SFM_SDK_NET.UFGPIOInputData,System.Int32,Suprema.SFM_SDK_NET.UFGPIOOutputData[])">
+            <summary>
+            Configures the shared I/O GPIO port. 
+            </summary>
+            <param name="port">GPIO port. Only GPIO 0 to GPIO 3 can be a shared I/O port.</param>
+            <param name="inputData">Input data to be assigned.</param>
+            <param name="numOfOutputData">Number of UFGPIOOutputData to be assigned.</param>
+            <param name="outputData">Array of UFGPIOOutputData to be assigned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_DisableGPIO(Suprema.SFM_SDK_NET.UF_GPIO_PORT)">
+            <summary>
+            Disables a GPIO port.
+            </summary>
+            <param name="port">GPIO port.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ClearAllGPIO">
+            <summary>
+            Clears all the configurations of GPIO ports.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetDefaultGPIO">
+            <summary>
+            Resets the configurations of GPIO ports to default.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_EnableWiegandInput(Suprema.SFM_SDK_NET.UFGPIOWiegandData)">
+            <summary>
+            Enables Wiegand input. Wiegand input uses GPIO 2 and GPIO 3 as input signal.
+            </summary>
+            <param name="data">UFGPIOWiegandData </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_EnableWiegandOutput(Suprema.SFM_SDK_NET.UFGPIOWiegandData)">
+            <summary>
+            Enables Wiegand output. Wiegand output use GPIO 4 and GPIO 5 as output signal.
+            </summary>
+            <param name="data">Wiegand configuration data.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_DisableWiegandInput">
+            <summary>
+            Disables Wiegand input.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_DisableWiegandOutput">
+            <summary>
+            Disables Wiegand output.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_MakeGPIOConfiguration(Suprema.SFM_SDK_NET.UFConfigComponentHeader@,System.Byte[])">
+            <summary>
+            Makes GPIO configuration data to be saved into a file. 
+            </summary>
+            <param name="configHeader">Pointer to the configuration header. </param>
+            <param name="configData">Pointer to the configuration data.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_WriteUserMemory(System.Byte[])">
+            <summary>
+            Writes data into the user memory.
+            </summary>
+            <param name="memory">Pointer to the 256 byte array to be written. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReadUserMemory(System.Byte[])">
+            <summary>
+            Reads the contents of the user memory. 
+            </summary>
+            <param name="memory">Pointer to the 256 byte array to be read.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetTime(System.Int64)">
+            <summary>
+            Sets the time of the module.
+            </summary>
+            <param name="timeVal">Number of seconds elapsed since midnight (00:00:00), January 1, 1970. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetTime(System.Int64@)">
+            <summary>
+            Gets the time of the module. 
+            </summary>
+            <param name="timeVal">Pointer to the time value to be returned by the module.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetNumOfLog(System.UInt32@,System.UInt32@)">
+            <summary>
+            Retrieves the number of log records.
+            </summary>
+            <param name="numOfLog">Pointer to the number of log records to be returned.</param>
+            <param name="numOfTotalLog">Pointer to the maximum log records to be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReadLog(System.Int32,System.Int32,Suprema.SFM_SDK_NET.UFLogRecord[],System.Int32@)">
+            <summary>
+            Reads log records. 
+            </summary>
+            <param name="startIndex">Start index of log records to be read.</param>
+            <param name="count">Number of log records to be read.</param>
+            <param name="logRecord">Pointer to the log records to be read.</param>
+            <param name="readCount">Pointer to the number of log records actually read.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReadLatestLog(System.Int32,Suprema.SFM_SDK_NET.UFLogRecord[],System.Int32@)">
+            <summary>
+            Reads latest log records.
+            </summary>
+            <param name="count">Number of latest log records to be read.</param>
+            <param name="logRecord">Pointer to the log records to be read.</param>
+            <param name="readCount">Pointer to the number of log records actually read.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_DeleteOldestLog(System.Int32,System.Int32@)">
+            <summary>
+            Deletes oldest log records. 
+            </summary>
+            <param name="count">Number of oldest log records to be deleted. It should be a multiple of 256. </param>
+            <param name="deletedCount">Pointer to the number of log records actually deleted.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_DeleteAllLog">
+            <summary>
+            Deletes all the log records. 
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ClearLogCache">
+            <summary>
+            Clears the log cache. 
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReadLogCache(System.Int32,System.Int32@,Suprema.SFM_SDK_NET.UFLogRecord[])">
+            <summary>
+            Reads the log records in the cache. After reading, the cache will be cleared. The maximum number of log records in the cache is 256.
+            </summary>
+            <param name="dataPacketSize">Data packet size used in Extended Data Transfer protocol.</param>
+            <param name="numOfLog">Pointer to the number of log records to be returned.</param>
+            <param name="logRecord">Pointer to the log records to be returned. This pointer should be preallocated large enough to store the log records.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetCustomLogField(Suprema.SFM_SDK_NET.UF_LOG_SOURCE,System.UInt32)">
+            <summary>
+            There is a 4 byte reserved field in each log record. This function is used for setting  this custom value. If the custom field is not set, it will be filled with NULL.
+            </summary>
+            <param name="source">Users can set 4 different custom values according to the source of log records.</param>
+            <param name="customField">4 byte custom value.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetCustomLogField(Suprema.SFM_SDK_NET.UF_LOG_SOURCE,System.UInt32@)">
+            <summary>
+            Reads the custom value of the specified log source. 
+            </summary>
+            <param name="source">Log source.</param>
+            <param name="customField">Pointer to the 4 byte custom value to be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_Upgrade(System.String,System.Int32)">
+            <summary>
+            Upgrades the firmware of the module. Users should not turn off the module when upgrade is in progress.
+            </summary>
+            <param name="firmwareFilename">Null-terminated string that specifies the firmware file name.</param>
+            <param name="dataPacketSize">The packet size of firmware data. If it is 16384, the firmware is divided into 16384 byte packets before transferring to the module.</param>
+            <returns>If upgrade succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_FormatUserDatabase">
+            <summary>
+            Erase the user database partition (which is specific area stores fingerprint template into flash memory.) of the module.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ResetSystemConfiguration">
+            <summary>
+            Reset all system parameter and GPIO configuration of the module as factory default.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetWiegandFormat(Suprema.SFM_SDK_NET.UFWiegandFormatHeader@,Suprema.SFM_SDK_NET.UFWiegandFormatData@,System.Int32,System.Int32)">
+            <summary>
+            Configures the Wiegand format. 
+            </summary>
+            <param name="header">UFWiegandFormatHeader</param>
+            <param name="data">Wiegand format data. If the format is UF_WIEGAND_26BIT, there is no format data and this parameter will be ignored. </param>
+            <param name="pulseWidth">Specifies the width of Wiegand signal.</param>
+            <param name="pulseInterval">Specifies the interval of Wiegand signal.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetWiegandFormat(Suprema.SFM_SDK_NET.UFWiegandFormatHeader@,Suprema.SFM_SDK_NET.UFWiegandFormatData@,System.Int32@,System.Int32@)">
+            <summary>
+            Gets the Wiegand format data. 
+            </summary>
+            <param name="header">Pointer to the format header to be returned.</param>
+            <param name="data">Pointer to the format data to be returned.</param>
+            <param name="pulseWidth">Pointer to the width of Wiegand signal. </param>
+            <param name="pulseInterval">Pointer to the interval of Wiegand signal.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetWiegandIO(Suprema.SFM_SDK_NET.UF_WIEGAND_INPUT_MODE,Suprema.SFM_SDK_NET.UF_WIEGAND_OUTPUT_MODE,System.Int32)">
+            <summary>
+            Configures the Wiegand IO ports. 
+            </summary>
+            <param name="inputMode">UF_WIEGAND_INPUT_MODE</param>
+            <param name="outputMode">UF_WIEGAND_OUTPUT_MODE</param>
+            <param name="numOfChar">Number of characters in ABA Track II output format. It is ignored if outputMode is not UF_WIEGAND_OUTPUT_ABA_TRACK_II.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetWiegandIO(Suprema.SFM_SDK_NET.UF_WIEGAND_INPUT_MODE@,Suprema.SFM_SDK_NET.UF_WIEGAND_OUTPUT_MODE@,System.Int32@)">
+            <summary>
+            Gets the configurations of Wiegand IO ports.
+            </summary>
+            <param name="inputMode">Pointer to Wiegand input mode to be returned.</param>
+            <param name="outputMode">Pointer to Wiegand output mode to be returned.</param>
+            <param name="numOfChar">Pointer to the number of characters in ABA Track II output format. It is ignored if outputMode is not UF_WIEGAND_OUTPUT_ABA_TRACK_II.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetWiegandOption(System.Boolean,System.UInt32,System.Boolean)">
+            <summary>
+            Sets advanced options.
+            </summary>
+            <param name="useFailID">Normally the module outputs Wiegand signal only if matching succeeds. If this option is TRUE, the module outputs the fail ID when matching fails.</param>
+            <param name="failID">ID to be output if useFailID is TRUE.</param>
+            <param name="inverseParityOnFail">If this option is TRUE, the module outputs Wiegand signals with inverted parities when matching fails.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetWiegandOption(System.Boolean@,System.UInt32@,System.Boolean@)">
+            <summary>
+            Gets the advanced options.
+            </summary>
+            <param name="useFailID">Pointer to the useFailID option to be returned. </param>
+            <param name="failID">Pointer to the fail ID to be returned. </param>
+            <param name="inverseParityOnFail">Pointer to the inverseParityOnFail option to be returned. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_SetAltValue(System.Int32,System.UInt32)">
+            <summary>
+            If the Wiegand format is UF_WIEGAND_26BIT or UF_WIEGAND_CUSTOM, users can set alternative values for non-ID fields. If an alternative value is set for a non-ID field, the module will replace the field with the alternative value before outputting the signal.
+            </summary>
+            <param name="fieldIndex">Index of the field. </param>
+            <param name="value">Alternative value of the field. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ClearAltValue(System.Int32)">
+            <summary>
+            Clears the alternative value of a field.
+            </summary>
+            <param name="fieldIndex">Index of the field. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetAltValue(System.Int32,System.UInt32@)">
+            <summary>
+            Gets the alternative value of a field.
+            </summary>
+            <param name="fieldIndex">Index of the field. </param>
+            <param name="value">Alternative value of the field to be returned. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. If alternative value is not set to the field, return UF_ERR_NOT_FOUND. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_MakeWiegandConfiguration(Suprema.SFM_SDK_NET.UFConfigComponentHeader@,System.Byte[])">
+            <summary>
+            Makes Wiegand configuration data to be saved into a file. 
+            </summary>
+            <param name="configHeader">Pointer to the configuration header to be returned. </param>
+            <param name="configData">Pointer to the configuration data to be returned. </param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_AddWiegandCommandCard(System.UInt32,Suprema.SFM_SDK_NET.UF_INPUT_FUNC)">
+            <summary>
+            Maps the input function to the specified ID.
+            </summary>
+            <param name="userID">User ID.</param>
+            <param name="function">UF_INPUT_FUNC</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_GetWiegandCommandCardList(System.Int32@,Suprema.SFM_SDK_NET.UFWiegandCommandCard@)">
+            <summary>
+            Gets the list of all the command cards. 
+            </summary>
+            <param name="numOfCard">Number of command cards to be returned. </param>
+            <param name="commandCard">Array of command card information to be returned.</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ClearAllWiegandCommandCard">
+            <summary>
+            Clears all the command card mappings.
+            </summary>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_WSQ_Decode(System.Byte[],System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Byte[],System.Int32)">
+            <summary>
+            Decode the compressed WSQ fingerprint image which is read or scaned by the module.
+            </summary>
+            <param name="odata">Pointer to the decoded image data. </param>
+            <remarks>odata is dynamic allocated by the UF_WSQ_Decode function. You should free memory of odata after use it.</remarks>
+            <param name="ow">Pointer to the width of decoded image data.</param>
+            <param name="oh">Pointer to the height of decoded image data.</param>
+            <param name="od">Pointer to the bit depth of decoded image data. (Always returns 8)</param>
+            <param name="oppi">Pointer to the ppi(pixel per inch) of decoded image data.</param>
+            <param name="lossyflag">Pointer to the lossy flag. (Always returns 1)</param>
+            <param name="idata">Pointer to the read or scaned WSQ fingerprint image data by the module.</param>
+            <param name="ilen">Pointer to the length of idata</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code. </returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ReadImageEx(Suprema.SFM_SDK_NET.UFImage@,Suprema.SFM_SDK_NET.UF_IMAGE_TYPE,System.Int32)">
+            <summary>
+            Retrieves the last scanned fingerprint image. 
+            </summary>
+            <param name="image">Pointer to the UFImage structure.</param>
+            <param name="type">Type of an image to read or scan. </param>
+            <param name="wsqBitRate">WSQ is compressed by input of wsqBitRate in the module. 225:High Quality, 150:Midium Quality, 75:Low Quality</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+        <member name="M:Suprema.SFM_SDK_NET.SFM_SDK_NET.UF_ScanImageEx(Suprema.SFM_SDK_NET.UFImage@,Suprema.SFM_SDK_NET.UF_IMAGE_TYPE,System.Int32)">
+            <summary>
+            Scans a fingerprint on the sensor and retrieves the image data.
+            </summary>
+            <param name="image">Pointer to the UFImage structure.</param>
+            <param name="type">Type of an image to read or scan. </param>
+            <param name="wsqBitRate">WSQ is compressed by input of wsqBitRate in the module. 225:High Quality, 150:Midium Quality, 75:Low Quality</param>
+            <returns>If the function succeeds, return UF_RET_SUCCESS. Otherwise, return the corresponding error code.</returns>
+        </member>
+    </members>
+</doc>
