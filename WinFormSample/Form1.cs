@@ -154,7 +154,7 @@ namespace WinFormSample
             uint imageQuality = 0;
 
             Message("Place your finger on the sensor");
-            ret = sdk.UF_Enroll(m_userID, UF_ENROLL_OPTION.UF_ENROLL_AUTO_ID, ref enrolledID, ref imageQuality);
+            ret = sdk.UF_Enroll(m_userID, m_userID == 0 ? UF_ENROLL_OPTION.UF_ENROLL_AUTO_ID : UF_ENROLL_OPTION.UF_ENROLL_NONE, ref enrolledID, ref imageQuality);
             
             if(ret == UF_RET_CODE.UF_RET_SUCCESS)
             {
