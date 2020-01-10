@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -263,6 +264,56 @@ namespace WinFormSample
             }
 
             Message(String.Format("Error : {0} , Failed to delete all templates", ret.ToString()));
+        }
+
+        private void Btn_enrollByTemplate_Click(object sender, EventArgs e)
+        {
+            if (!m_bConnected)
+            {
+                Message("Module is not connected");
+                return;
+            }
+
+            UF_ENROLL_OPTION option = UF_ENROLL_OPTION.UF_ENROLL_AUTO_ID;
+
+            uint userID = Convert.ToUInt32(tb_userID.Text);
+            uint enrollID = 0;
+
+            if(userID != 0)
+            {
+                // (Default) Add New : Adding more fingerprints to a current existing user ID.
+                // For using other options such as CHECK_ID, CHECK_FINGER and etc., please refer to Flag / Error Code section in Protocol Manual.
+                option = UF_ENROLL_OPTION.UF_ENROLL_ADD_NEW;
+                                
+            }
+
+            const int TEMPLATE_SIZE = 384;
+            byte[] templateData = new byte[TEMPLATE_SIZE];
+
+                       
+            String file_path = null;
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.InitialDirectory = "./";
+            dlg.Filter = "Template Files (*.dat)|*.dat| All files (*.*)|(*.*)";
+            if (dlg.ShowDialog() != DialogResult.OK)
+            {
+                Message("Canceled");
+                return;
+            }
+
+            file_path = dlg.FileName;
+            templateData = File.ReadAllBytes(file_path);
+
+            // Enroll by Template 
+            ret = sdk.UF_EnrollTemplate(userID, option, TEMPLATE_SIZE, templateData, ref enrollID);
+
+            if( ret == UF_RET_CODE.UF_RET_SUCCESS)
+            {
+                Message(String.Format("User {0} has been enrolled", enrollID));
+                return;
+            }
+
+            Message(String.Format("Error : {0} , Failed to enroll by template", ret.ToString()));
         }
     }
 }

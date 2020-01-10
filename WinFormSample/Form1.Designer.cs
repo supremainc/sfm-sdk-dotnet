@@ -43,7 +43,10 @@
             this.btn_deleteTemplate = new System.Windows.Forms.Button();
             this.btn_deleteAll = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btn_enrollByTemplate = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_connect
@@ -188,11 +191,32 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Basic function";
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btn_enrollByTemplate);
+            this.groupBox2.Location = new System.Drawing.Point(15, 241);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(548, 76);
+            this.groupBox2.TabIndex = 15;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Template Management";
+            // 
+            // btn_enrollByTemplate
+            // 
+            this.btn_enrollByTemplate.Location = new System.Drawing.Point(20, 32);
+            this.btn_enrollByTemplate.Name = "btn_enrollByTemplate";
+            this.btn_enrollByTemplate.Size = new System.Drawing.Size(122, 23);
+            this.btn_enrollByTemplate.TabIndex = 7;
+            this.btn_enrollByTemplate.Text = "Enroll by Template";
+            this.btn_enrollByTemplate.UseVisualStyleBackColor = true;
+            this.btn_enrollByTemplate.Click += new System.EventHandler(this.Btn_enrollByTemplate_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(575, 469);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tb_userID);
             this.Controls.Add(this.label_userID);
@@ -206,6 +230,7 @@
             this.Name = "Form1";
             this.Text = "WinFormSample";
             this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -228,6 +253,8 @@
         private System.Windows.Forms.Button btn_deleteTemplate;
         private System.Windows.Forms.Button btn_deleteAll;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button btn_enrollByTemplate;
     }
 }
 
